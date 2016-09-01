@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="dark"
+        android:title="@string/dark" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="imagequality"
+        android:summaryOff="@string/low"
+        android:summaryOn="@string/high"
+        android:title="@string/image" />
+
+
+    <Preference
+        android:enabled="true"
+        android:key="license"
+        android:selectable="true"
+        android:summary=""
+        android:title="@string/license" />
+
+    <Preference
+        android:enabled="true"
+        android:key="Version"
+        android:selectable="true"
+        android:summary="1.0.5"
+        android:title="@string/version" />
+
+    <Preference
+        android:enabled="true"
+        android:key="Share"
+        android:selectable="true"
+        android:title="@string/shareappdetails" />
+
+
+
+    <Preference
+        android:enabled="true"
+        android:key="About"
+        android:selectable="true"
+        android:title="@string/about" />
+
+
+</PreferenceScreen>
