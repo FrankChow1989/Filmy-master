@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.error_view)
     ErrorView mErrorView;
 
-
     private Trending trendingFragment;
     private SearchFragment searchFragment;
     private boolean cantProceed;
@@ -89,12 +88,8 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
             int statusCode = intent.getIntExtra("message", 0);
-
-
             CustomToast.show(context, "Failed to get latest movies.", true);
-
             cantProceed(statusCode);
-
         }
     };
 
@@ -134,48 +129,34 @@ public class MainActivity extends AppCompatActivity {
                 .retryText(getString(R.string.error_retry))
                 .build());
 
-
         mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
             @Override
             public void onRetry() {
-
                 if (Network.isNetworkConnected(MainActivity.this)) {
-
                     fetchingFromNetwork = true;
-
                     setScheduler();
-
                 }
-
                 canProceed();
-
             }
         });
 
-
         mErrorView.setVisibility(View.GONE);
-
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-
         materialSearchView.setVoiceSearch(true);
         materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do some magic
-
                 getSearchedResult(query);
                 searchFragment.showProgress();
-
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 //getSearchedResult(newText);
                 return true;
-
             }
         });
 
@@ -183,50 +164,37 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSearchViewShown() {
                 //Do some magic
-
                 tabLayout.setVisibility(View.GONE);
-
                 disableToolbarScrolling();
-
                 searchFragment = new SearchFragment();
                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.search_container, searchFragment)
                         .commit();
-
             }
 
             @Override
             public void onSearchViewClosed() {
                 //Do some magic
-
-
                 getSupportFragmentManager()
                         .beginTransaction()
                         .remove(searchFragment)
                         .commit();
-
                 if (!cantProceed)
                     tabLayout.setVisibility(View.VISIBLE);
-
                 enableToolbarScrolling();
-
             }
         });
 
 
         if (Network.isNetworkConnected(this)) {
-
             fetchingFromNetwork = true;
             setScheduler();
         }
-
-
     }
 
 
     private void allThemeLogic() {
-
         tabLayout.setTabTextColors(Color.parseColor("#bdbdbd"),Color.parseColor("#e0e0e0"));
         logo.setTextColor(Color.parseColor("#E0E0E0"));
         materialSearchView.setBackgroundColor(getResources().getColor(R.color.colorDarkThemePrimary));
@@ -238,18 +206,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void introLogic() {
-
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-
                 SharedPreferences getPrefs = PreferenceManager
                         .getDefaultSharedPreferences(getBaseContext());
-
                 boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-
                 if (isFirstStart) {
-
                     Intent i = new Intent(MainActivity.this, FilmyIntro.class);
                     startActivity(i);
                     SharedPreferences.Editor e = getPrefs.edit();
@@ -259,15 +222,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         t.start();
-
     }
 
     private void setScheduler() {
-
-
         FirstFetch firstFetch = new FirstFetch(this);
         firstFetch.start();
-
     }
 
     public void cantProceed(final int status) {
@@ -290,25 +249,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }, 1000);
-
     }
 
     public void canProceed() {
-
         cantProceed = false;
-
         tabLayout.setVisibility(View.VISIBLE);
         viewPager.setVisibility(View.VISIBLE);
         mErrorView.setVisibility(View.GONE);
 
         if (trendingFragment != null) {
-
             trendingFragment.retryLoading();
-
         }
-
         enableToolbarScrolling();
-
     }
 
     private void disableToolbarScrolling() {
@@ -317,7 +269,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void enableToolbarScrolling() {
-
         AppBarLayout.LayoutParams params =
                 (AppBarLayout.LayoutParams) toolbarScroller.getLayoutParams();
         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -326,66 +277,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-
-
         trendingFragment = new Trending();
         InTheaters inTheatersFragment = new InTheaters();
         UpComing upComingFragment = new UpComing();
-
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(trendingFragment, getString(R.string.trending));
         adapter.addFragment(inTheatersFragment, getString(R.string.theatres));
         adapter.addFragment(upComingFragment, getString(R.string.upcoming));
         viewPager.setAdapter(adapter);
-
     }
 
     private void getSearchedResult(String query) {
-
         if (searchFragment != null) {
             searchFragment.getSearchedResult(query);
         }
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
         MenuItem itemSearch = menu.findItem(R.id.action_search);
         MenuItem itemBook = menu.findItem(R.id.ic_collection);
-
         if (nightMode){
             itemSearch.setIcon(R.drawable.ic_action_action_search);
             itemBook.setIcon(R.drawable.ic_action_action_book2);
         }
-
         materialSearchView.setMenuItem(itemSearch);
         return true;
-
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_search) {
-
             startActivity(new Intent(this, SearchFragment.class));
         }
-
         if (id == R.id.ic_setting) {
             startActivity(new Intent(this, SettingsActivity.class));
-
         }
-
         if (id == R.id.ic_collection) {
             startActivity(new Intent(this, SavedMovies.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -399,7 +331,6 @@ public class MainActivity extends AppCompatActivity {
                     materialSearchView.setQuery(searchWrd, false);
                 }
             }
-
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -417,16 +348,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightModeNew = sp.getBoolean("dark", false);
-
         if (nightMode!=nightModeNew)
             recreate();
-
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("fetch-failed"));
-
     }
 
     @Override
@@ -435,6 +362,4 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onPause();
     }
-
-
 }
